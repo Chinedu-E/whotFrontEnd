@@ -42,7 +42,7 @@ const CreateGameComponent = ({ onBack }: { onBack: () => void}) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true)
     e.preventDefault();
-    const url = `${backend.replace('ws', 'https')}/create/`
+    const url = `${backend.replace('ws', 'http')}/create/`
     const request = new Request(url, {
         method: "POST",
         body: JSON.stringify(gameSettings),
