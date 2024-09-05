@@ -7,6 +7,9 @@ import { ArrowLeft, Users, Clock, Shield } from 'lucide-react';
 import Loader from './Loader';
 import { useRouter } from 'next/navigation';
 
+const backend = process.env.NEXT_PUBLIC_BACKEND || 'ws://localhost:8000'
+
+
 const CreateGameComponent = ({ onBack }: { onBack: () => void}) => {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -39,7 +42,7 @@ const CreateGameComponent = ({ onBack }: { onBack: () => void}) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true)
     e.preventDefault();
-    const url = 'http://localhost:8000/create/'
+    const url = `${backend}/create/`
     const request = new Request(url, {
         method: "POST",
         body: JSON.stringify(gameSettings),
