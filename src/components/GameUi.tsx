@@ -87,7 +87,7 @@ const getWsUrl = (displayName: string, settings: string,
     }
 
     if (settings) {
-        return `${backend}://localhost:8000/ws/create/${client_id}?id=${session_id}&settings=${settings}`
+        return `${backend}/ws/create/${client_id}?id=${session_id}&settings=${settings}`
     }
     return ''
 }
