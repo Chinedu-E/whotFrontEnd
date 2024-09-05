@@ -138,11 +138,15 @@ const WhotGameUI = ({ }) => {
     useEffect(() => { setTmpShow(faceCard) }, [faceCard])
 
     useEffect(() => {
-        const curTurn = players.find(p => p.id === turn).name
-        toast({
-            title: `It is ${curTurn}'s turn`
-        })
-    }, [])
+        const player = players.find(p => p.id === turn)
+        if (player) {
+            const curTurn = player.name
+            toast({
+                title: `It is ${curTurn}'s turn`
+            })
+        }
+        
+    }, [turn])
 
     const getPlayerPosition = (index: number) => {
         const positions = ['bottom', 'left', 'top', 'right'];
