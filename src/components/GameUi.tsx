@@ -13,10 +13,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import ReactDOM from 'react-dom';
 
-
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
+import { HTML5Backend, getEmptyImage } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { isMobile } from 'react-device-detect';
 import { getStackValue, isValid } from '@/whot/game';
@@ -38,28 +38,60 @@ const ItemTypes = {
     CARD: 'card',
 };
 
-const DraggableCard = ({ card, index }: { card: any, index: number }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const [{ isDragging }, drag] = useDrag({
-        type: ItemTypes.CARD,
-        item: { index, card },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-
-        }),
+const DraggableCard = ({ card, index }: {card: any, index: number}) => {
+    const ref = useRef(null);
+    const [{ isDragging }, drag, preview] = useDrag({
+      type: ItemTypes.CARD,
+      item: { index, card },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
     });
-
-    drag(ref)
-
+  
+    useEffect(() => {
+      preview(getEmptyImage(), { captureDraggingState: true });
+    }, [preview]);
+  
+    drag(ref);
+  
     return (
-        <div
-            ref={ref}
-            className={`w-6 h-8 sm:w-10 sm:h-14 ${isDragging ? 'opacity-50' : ''}`}
-        >
-            <WhotCard shape={card.shape} num={card.num} faceDown={false} />
-        </div>
+      <div
+        ref={ref}
+        className={`w-6 h-8 sm:w-10 sm:h-14 ${isDragging ? 'opacity-50' : ''}`}
+      >
+        <WhotCard shape={card.shape} num={card.num} faceDown={false} />
+      </div>
     );
-};
+  };
+  
+  const CustomDragLayer = () => {
+    const { itemType, isDragging, item, currentOffset } = useDragLayer((monitor) => ({
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      currentOffset: monitor.getSourceClientOffset(),
+      isDragging: monitor.isDragging(),
+    }));
+  
+    if (!isDragging) {
+      return null;
+    }
+  
+    return (
+      <div style={{
+        position: 'fixed',
+        pointerEvents: 'none',
+        zIndex: 100,
+        left: currentOffset?.x,
+        top: currentOffset?.y,
+        transform: 'rotate(5deg)',
+      }}>
+        <div className="w-16 h-24"> {/* Adjust size as needed */}
+          <WhotCard shape={item.card.shape} num={item.card.num} faceDown={false} />
+        </div>
+      </div>
+    );
+  };
+  
 
 const DroppableFaceCard = ({ onDrop, faceCard }: { onDrop: (val: any) => void, faceCard: any }) => {
     const [, drop] = useDrop({
@@ -235,7 +267,7 @@ const WhotGameUI = ({ }) => {
 
     return (
         <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-            <div className="h-screen w-full bg-green-800 flex items-center justify-center p-2 sm:p-4">
+            <div className="h-[100svh] w-full bg-green-800 flex items-center justify-center p-2 sm:p-4">
                 <div className="relative w-full h-full sm:h-auto sm:aspect-video max-w-7xl bg-green-700 rounded-xl sm:rounded-3xl shadow-xl overflow-hidden flex flex-col">
                     <GameStartCountdown
                         isStarting={message === 'starting'}
@@ -308,7 +340,7 @@ const WhotGameUI = ({ }) => {
                             return (
                                 <div
                                     key={player.id}
-                                    className={`absolute ${position === 'bottom' ? 'bottom-16 sm:bottom-10 left-[40%] sm:left-1/2 transform -translate-x-1/2 translate-y-1/2' :
+                                    className={`absolute ${position === 'bottom' ? 'bottom-16 sm:bottom-10 left-[40%] sm:left-1/2 md:left-[40%] transform -translate-x-1/2 translate-y-1/2' :
                                         position === 'left' ? 'left-10 top-1/2 transform -translate-y-1/2 -translate-x-1/2' :
                                             position === 'top' ? 'top-20 left-[40%] sm:left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col' :
                                                 'right-10 top-1/2 transform -translate-y-1/2 translate-x-1/2'
@@ -415,6 +447,7 @@ const WhotGameUI = ({ }) => {
                 
                 <ConnectionLostDialog open={Boolean(turn) && !isConnected && !winner}/>
             </div>
+            <CustomDragLayer/>
         </DndProvider>
     );
 };
