@@ -71,7 +71,7 @@ const CreateGameComponent = ({ onBack }: { onBack: () => void}) => {
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Lobby Name</label>
+              <label className="block text-sm font-medium text-gray-700">Your Display Name</label>
               <Input
                 type="text"
                 name="hostName"
@@ -115,18 +115,6 @@ const CreateGameComponent = ({ onBack }: { onBack: () => void}) => {
                 min={0}
                 max={Math.max(0, gameSettings.numPlayers - 1)}
                 step={1}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Time Limit per Turn (seconds): {gameSettings.timeLimit}</label>
-              <Slider
-                name="timeLimit"
-                value={[gameSettings.timeLimit]}
-                onValueChange={(value) => handleSliderChange('timeLimit', value)}
-                min={10}
-                max={120}
-                step={5}
                 className="mt-1"
               />
             </div>
