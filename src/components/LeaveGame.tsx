@@ -13,7 +13,7 @@ const LeaveGameDialog = ({ open, onClose }: {open: boolean, onClose: () => void}
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent className="max-h-[80vh] overflow-y-auto rounded-lg shadow-lg">
-        <AlertDialogHeader className="bg-red-500 text-white px-6 py-4 rounded-t-lg">
+        <AlertDialogHeader className="bg-red-600 text-white px-6 py-4 rounded-t-lg">
           <div className="flex items-center justify-between">
             <AlertDialogTitle className="text-2xl font-bold">Are you sure?</AlertDialogTitle>
             <button onClick={onClose} className="text-white hover:text-gray-300">
@@ -33,7 +33,7 @@ const LeaveGameDialog = ({ open, onClose }: {open: boolean, onClose: () => void}
           <AlertDialogCancel onClick={onClose} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded">
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction onClick={handleLeaveGame} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+          <AlertDialogAction onClick={handleLeaveGame} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
             Leave Game
           </AlertDialogAction>
         </AlertDialogFooter>
