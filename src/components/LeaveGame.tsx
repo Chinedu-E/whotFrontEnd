@@ -29,7 +29,7 @@ const LeaveGameDialog = ({ open, onClose }: {open: boolean, onClose: () => void}
             Leaving the game will take you back to the home screen, and you&apos;ll lose any progress you&apos;ve made.
           </p>
         </AlertDialogDescription>
-        <AlertDialogFooter className="bg-gray-100 px-6 py-4 rounded-b-lg flex items-center justify-center">
+        <AlertDialogFooter className="px-6 py-4 rounded-b-lg flex items-center justify-center">
           <AlertDialogCancel onClick={onClose} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded">
             Cancel
           </AlertDialogCancel>
