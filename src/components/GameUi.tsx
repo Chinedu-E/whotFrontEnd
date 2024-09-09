@@ -13,7 +13,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import ReactDOM from 'react-dom';
 
 import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
 import { HTML5Backend, getEmptyImage } from 'react-dnd-html5-backend';
@@ -30,6 +29,7 @@ import WhotGameInfo from './GameInfo';
 import ConnectionLostDialog from './ConnectionLost';
 import LeaveGameDialog from './LeaveGame';
 import JoinServerRejectedDialog from './Reject';
+import AccessCodeDialog from './AccessCode';
 
 
 const backend = process.env.NEXT_PUBLIC_BACKEND || 'ws://localhost:8000'
@@ -442,6 +442,8 @@ const WhotGameUI = ({ }) => {
                 </AlertDialog>
 
                 {turn && <JoinServerRejectedDialog reason={message}/>}
+
+                {message === 'waiting' && <AccessCodeDialog settings={settings} session_id={session_id} />}
                 
                 <LeaveGameDialog open={leaveGame} onClose={() => setLeaveGame(false)} />
                 
